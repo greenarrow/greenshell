@@ -1,0 +1,17 @@
+[user]
+	name = Stefan Blanke
+[alias]
+	last = log -1 HEAD
+	g = !gitg
+	reup = remote update
+	wipe = reset --hard
+	unstage = reset HEAD
+	modge=!/net/homes/sblanke/scripts/modge
+	cc=cherry-pick
+	dp=commit --amend
+
+[core]
+	excludesfile = ~/.gitignore-global
+
+[diff "dia2svg"]
+	textconv = dia2svg
