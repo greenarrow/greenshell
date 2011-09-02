@@ -1,14 +1,19 @@
 [user]
 	name = Stefan Blanke
+	email = greenarrow@users.sourceforge.net
+[gui]
+	recentrepo = ~
 [alias]
 	last = log -1 HEAD
 	g = !gitg
 	reup = remote update
 	wipe = reset --hard
 	unstage = reset HEAD
-	modge=!/net/homes/sblanke/scripts/modge
+	modge=!~/.greenshell/git-modge.py
+	pack=!~/.greenshell/git-pack.py
 	cc=cherry-pick
 	dp=commit --amend
+	co=checkout
 
 [core]
 	excludesfile = ~/.gitignore-global
