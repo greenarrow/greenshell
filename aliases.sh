@@ -1,6 +1,8 @@
 alias sl='ls'
 alias l='ls'
 alias dg='git diff'
+alias gd='git diff'
+alias gss='git status'
 alias tit='git'
 alias gg='gitg'
 alias ge='gedit'
