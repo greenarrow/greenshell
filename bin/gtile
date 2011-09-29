@@ -1,0 +1,102 @@
+#!/usr/bin/env python
+
+import subprocess
+import re
+
+
+CLASSES = (
+    'Firefox',
+    'gnome-terminal',
+    'gedit',
+)
+
+TITLE_BLACKLIST = (
+    'work',
+)
+
+
+RE_DESKTOP = re.compile(r'(\d+)\s+([*-])')
+RE_WINDOW = re.compile(r'([0-9a-fx]+) +([0-9\-]+) ([^\s]+)\s+([^\s]+)\s+(.+)')
+RE_SCREEN = re.compile(r'(\d+)x(\d+)')
+
+
+def get_screen_res():
+    p = subprocess.Popen('xrandr|grep "*"', shell=True, stdout=subprocess.PIPE)
+    assert p.wait() == 0
+    out, err = p.communicate()
+    result = RE_SCREEN.findall(out)
+    assert len(result)
+    return tuple(map(int, result[0]))
+
+
+def get_active_desktop():
+    p = subprocess.Popen('wmctrl -d', shell=True, stdout=subprocess.PIPE)
+    assert p.wait() == 0
+    out, err = p.communicate()
+
+    for i, status in RE_DESKTOP.findall(out):
+        if status == '*':
+            return int(i)
+
+
+def get_windows():
+    p = subprocess.Popen('wmctrl -l -x', shell=True, stdout=subprocess.PIPE)
+    assert p.wait() == 0
+    out, err = p.communicate()
+
+    return map(
+        lambda i: (int(i[0], 16), int(i[1]), i[2], i[3], i[4]),
+        RE_WINDOW.findall(out)
+    )
+
+
+def set_window(wid, x, y, w, h):
+    cmd = 'wmctrl -i -r %d -e 0,%s' % (wid, ','.join(map(str, (x, y, w, h))))
+    print cmd
+    p = subprocess.Popen(cmd, shell=True)
+    assert p.wait() == 0
+
+
+# todo named tuple (simplifies everything)
+
+if __name__ == '__main__':
+    class_counts = {}
+
+    active_desktop = get_active_desktop()
+    terminals = filter(
+        lambda (wid, desktop, wclass, client, title): desktop == active_desktop \
+            and len(filter(lambda i: i in wclass, CLASSES)) \
+            and len(filter(lambda i: i not in title, TITLE_BLACKLIST)),
+        get_windows()
+    )
+
+    terminals = sorted(
+        terminals,
+        key=lambda i: map(
+            lambda cc: CLASSES.index(cc),
+            filter(lambda c: c in i[2], CLASSES)
+        )[0]
+    )
+
+    sw, sh = get_screen_res()
+
+    division = 4
+    pad = 8
+    ycut = 57
+
+    for i, w in enumerate(terminals):
+        # we tile each class seperately across the screen
+        index = class_counts[w[2]] = class_counts.setdefault(w[2], -1) + 1
+
+        set_window(
+            w[0],
+            #(sw * min(i, division - 1)) / division,
+            (sw * min(index, division - 1)) / division,
+            0,
+            (sw / division) - pad,
+            sh - ycut
+        )
+
+
+
+
