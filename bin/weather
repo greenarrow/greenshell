@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+import urllib
+import optparse
+import string
+import sys
+import re
+import os
+
+RE_TITLE = re.compile(r'<title>(.+ latest weather).+</title>')
+RE_HISTORY = re.compile(r'<td class="[a-z]{3,5}Row" align="center"><strong>' + \
+r'(\d+?)</strong></td>.+?<td class="[a-z]{3,5}Row value">([\-\d\.]+?)</td>' + \
+r'\s+<td class="[a-z]{3,5}Row unit">&deg;C</td>.+?' + \
+r'<td class="[a-z]{3,5}Row value">(\d+)</td>.+?' + \
+r'<td class="[a-z]{3,5}Row unit">mph</td>', re.DOTALL)
+
+
+class Template(string.Template):
+	delimiter = "%"
+
+	def substitute(self, *args, **kwargs):
+		kwargs["p"] = ("%.1fC" % float(kwargs["p"])).rjust(5)
+		kwargs["s"] = "%s mph" % str(int(kwargs["s"])).rjust(3)
+		return super(Template, self).substitute(self, *args, **kwargs)
+
+
+if __name__ == "__main__":
+	parser = optparse.OptionParser()
+	parser.add_option("-f", "--format", default="%t\t%p\t%s")
+	opts, args = parser.parse_args()
+
+	url = os.environ.get("WEATHER_URL")
+	if url is None:
+		sys.stderr.write("WEATHER_URL must be set to Met Office URL\n")
+		sys.exit(1)
+
+	data = urllib.urlopen(url).read()
+
+	title = RE_TITLE.findall(data)[0]
+	rows = RE_HISTORY.findall(data)
+	#print rows
+
+	if len(rows) == 0:
+		sys.stderr.write("No rows\n")
+		sys.exit(1)
+
+	template = Template(opts.format)
+
+	print title
+	print "Time\tTemp\tWind"
+	for row in rows:
+		print template.substitute(t=row[0], p=row[1], s=row[2])
+
+
