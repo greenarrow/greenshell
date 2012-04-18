@@ -18,15 +18,44 @@ r'<td class="[a-z]{3,5}Row unit">mph</td>', re.DOTALL)
 class Template(string.Template):
 	delimiter = "%"
 
+	def __init__(self, format, units=True, align=None):
+		self.units = units
+		self.align = align
+		return super(Template, self).__init__(format)
+
 	def substitute(self, *args, **kwargs):
-		kwargs["p"] = ("%.1fC" % float(kwargs["p"])).rjust(5)
-		kwargs["s"] = "%s mph" % str(int(kwargs["s"])).rjust(3)
+		kwargs["T"] = float(kwargs["T"])
+		kwargs["s"] = str(int(kwargs["s"]))
+
+		if self.units:
+			kwargs["T"] = "%.1fC" % kwargs["T"]
+			kwargs["s"] = "%s mph" % kwargs["s"]
+
+		if self.align is not None:
+			assert len(self.align) == len(kwargs)
+
+			i = 0
+			for k, v in kwargs.iteritems():
+				kwargs[k] = str(v).rjust(self.align[i])
+				i += 1
+
 		return super(Template, self).substitute(self, *args, **kwargs)
 
 
 if __name__ == "__main__":
 	parser = optparse.OptionParser()
-	parser.add_option("-f", "--format", default="%t\t%p\t%s")
+	parser.add_option("-f", "--format",
+		default="%t\t%T\t%s"
+	)
+	parser.add_option("-n", "--max-count",
+		dest="max_count",
+		default=None
+	)
+	parser.add_option("-t", "--no-title",
+		dest="title",
+		action="store_false",
+		default=True
+	)
 	opts, args = parser.parse_args()
 
 	url = os.environ.get("WEATHER_URL")
@@ -44,11 +73,20 @@ if __name__ == "__main__":
 		sys.stderr.write("No rows\n")
 		sys.exit(1)
 
-	template = Template(opts.format)
+	template = Template(opts.format, align=(4,5,3))
 
-	print title
-	print "Time\tTemp\tWind"
+	if opts.max_count is not None:
+		rows = rows[-int(opts.max_count):]
+
+	if opts.title:
+		print title
+		print "Time\tTemp\tWind"
+
 	for row in rows:
-		print template.substitute(t=row[0], p=row[1], s=row[2])
+		try:
+			print template.substitute(t=row[0], T=row[1], s=row[2])
+		except TypeError:
+			sys.stderr.write("Bad template\n")
+			sys.exit(1)
 
 
