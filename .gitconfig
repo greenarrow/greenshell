@@ -17,6 +17,7 @@
 
 [core]
 	excludesfile = ~/.gitignore-global
+	editor = "vim --cmd ':set textwidth=74'"
 
 [diff "dia2svg"]
 	textconv = dia2svg
