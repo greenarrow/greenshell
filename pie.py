@@ -42,3 +42,17 @@ def diff(a, b):
     for i in range(len(a)):
             result.append((a[i] == b[i]) and '^' or ' ')
     return ''.join(result)
+
+def dictdiff(a, b):
+    for key in set(a.iterkeys()) - set(b.iterkeys()):
+            print "- {%s}" % repr(key)
+
+    for key in set(b.iterkeys()) - set(a.iterkeys()):
+            print "+ {%s}" % repr(key)
+
+    for key in set(a.iterkeys()) & set(b.iterkeys()):
+            if a[key] != b[key]:
+                    print "- %s" % repr({key : a[key]})
+                    print "+ %s" % repr({key : b[key]})
+
+
