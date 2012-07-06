@@ -13,8 +13,4 @@ mv .vimrc .vimrc.old
 ln -s .greenshell/.vim .
 ln -s .greenshell/.vimrc .
 
-# Install gedit colour scheme
-mkdir -p $HOME/.local/share/gtksourceview-2.0/styles
-ln -s $HOME/.greenshell/gedit/green_cobalt.xml $HOME/.local/share/gtksourceview-2.0/styles/green_cobalt.xml
-
 echo "done"
