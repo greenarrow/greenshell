@@ -1,5 +1,6 @@
 alias sl='ls'
 alias l='ls'
+alias c='clear'
 
 alias dg='git diff'
 alias gd='git diff'
