@@ -10,7 +10,8 @@ alias gg='gitg'
 alias git-strap='git init && git add . && git commit -a -m "Initial Commit"'
 
 alias ge='gedit'
-alias gv='gvim --remote'
+alias gv='gvim'
+alias gvr='gvim --remote'
 
 alias pie='PYTHONSTARTUP=$HOME/.greenshell/pie.py python'
 
