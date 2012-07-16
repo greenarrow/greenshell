@@ -6,3 +6,6 @@ set number
 
 colorscheme greencobalt
 :set guioptions-=T 
+
+:set ignorecase
+:set smartcase
