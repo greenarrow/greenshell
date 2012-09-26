@@ -10,7 +10,7 @@ ln -s $HOME/.greenshell/.gitignore-global $HOME/.gitignore-global
 cd $HOME || exit 1
 mv .vim .vim.old
 mv .vimrc .vimrc.old
-ln -s .greenshell/.vim .
-ln -s .greenshell/.vimrc .
+ln -s $HOME/.greenshell/.vim $HOME/.vim
+ln -s $HOME/.greenshell/.vimrc $HOME/.vimrc
 
 echo "done"
