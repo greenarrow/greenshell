@@ -13,4 +13,7 @@ mv .vimrc .vimrc.old
 ln -s $HOME/.greenshell/.vim $HOME/.vim
 ln -s $HOME/.greenshell/.vimrc $HOME/.vimrc
 
+mv $HOME/.config/Terminal/terminalrc $HOME/.config/Terminal/terminalrc.old
+ln -s $HOME/.greenshell/terminalrc $HOME/.config/Terminal/terminalrc
+
 echo "done"
