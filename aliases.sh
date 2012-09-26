@@ -1,6 +1,7 @@
 alias sl='ls'
 alias l='ls'
 alias c='clear'
+alias th='history | tail'
 
 alias dg='git diff'
 alias gd='git diff'
@@ -29,6 +30,7 @@ alias ll='ls -l'
 alias deltemp='find . -iname "*~"|xargs rm'
 alias delpyc='find . -iname "*.pyc"|xargs rm'
 alias time='/usr/bin/time -v '
+
 alias xp='exaile --play-pause'
 alias xn='exaile --next'
 alias xb='exaile --prev'
