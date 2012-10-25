@@ -48,5 +48,9 @@ hi PreProc 		guifg=#e5786d gui=none
 hi Number		guifg=#3ad900 gui=none
 hi Special		guifg=#cccccc gui=none
 
-
+" Spelling
+hi SpellBad    guisp=#ffddbb guibg=#000066
+hi SpellCap    guisp=#ffddbb guibg=#000066
+hi SpellLocal  guisp=#ffddbb guibg=#000066
+hi SpellRare   guisp=#ffddbb guibg=#000066
 
