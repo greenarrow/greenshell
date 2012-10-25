@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "head:"
+head $@
+echo
+
+echo "tail:"
+tail $@
+echo
