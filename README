@@ -1,0 +1,11 @@
+Green Shell is my personal Bash  environment. Trivial to deploy on any new
+computer. Handy both for home and work.
+
+It's unlikely that you will want to use this same set of customisations but
+it could still be interesting as a template for setting up your own portable
+environment.
+
+To use it on a new computer just:
+$ git clone https://github.com/greenarrow/greenshell.git .greenshell
+$ cd .greenshell
+$ ./install.sh
