@@ -16,4 +16,7 @@ ln -s $HOME/.greenshell/.vimrc $HOME/.vimrc
 mv $HOME/.config/Terminal/terminalrc $HOME/.config/Terminal/terminalrc.old
 ln -s $HOME/.greenshell/terminalrc $HOME/.config/Terminal/terminalrc
 
+mv $HOME/.valgrindrc $HOME/.valgrindrc.old
+ln -s $HOME/.greenshell/.valgrindrc $HOME/.valgrindrc
+
 echo "done"
