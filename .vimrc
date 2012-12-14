@@ -12,6 +12,9 @@ colorscheme greencobalt
 
 :set cursorline
 
+:set listchars=tab:\ \ ,trail:-  
+:set list
+
 function TabToggle()
     if &expandtab
         set shiftwidth=8
