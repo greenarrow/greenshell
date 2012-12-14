@@ -2,6 +2,7 @@ alias sl='ls'
 alias l='ls'
 alias c='clear'
 alias th='history | tail'
+alias grep='grep --color=auto'
 
 alias dg='git diff'
 alias gd='git diff'
