@@ -11,9 +11,13 @@
 	unstage = reset HEAD
 	modge=!~/.greenshell/git-modge.py
 	pack=!~/.greenshell/git-pack.py
+	brancha=!git branch | sed -e '/abandoned$/d' -e '/merged$/d'
+	ba=!git branch | sed -e '/abandoned$/d' -e '/merged$/d'
 	cc=cherry-pick
 	dp=commit --amend
 	co=checkout
+	b=branch
+
 
 [core]
 	excludesfile = ~/.gitignore-global
