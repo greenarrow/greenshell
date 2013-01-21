@@ -18,10 +18,13 @@
 	co=checkout
 	b=branch
 
-
 [core]
 	excludesfile = ~/.gitignore-global
 	editor = "vim --cmd ':set textwidth=74'"
 
+[color]
+	ui = true
+
 [diff "dia2svg"]
 	textconv = dia2svg
+
