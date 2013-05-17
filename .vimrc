@@ -1,3 +1,4 @@
+set nomodeline
 set number
 
 set shiftwidth=4
