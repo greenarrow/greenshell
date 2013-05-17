@@ -4,6 +4,7 @@ set number
 set shiftwidth=4
 set softtabstop=4
 set expandtab
+set tw=79
 
 colorscheme greencobalt
 :set guioptions-=T 
