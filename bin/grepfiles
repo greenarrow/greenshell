@@ -1,0 +1,4 @@
+#!/bin/bash
+
+exec awk -F ':' -- '{print $1}' | sort -u
+
