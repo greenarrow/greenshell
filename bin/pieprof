@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -e
+
+
+usage()
+{
+    echo "Usage: `basename $0` [arg] ..."
+    echo "Profile Python code using cProfile."
+    echo
+}
+
+
+if [ $# -eq 0 ]
+then
+    usage
+    exit 1
+fi
+
+if [ "$1" == "-h" ]
+then
+    usage
+    exit 0
+fi
+
+OUTPUT=`mktemp`
+
+python -m cProfile -o $OUTPUT -- $@
+
+echo
+
+python -c "
+import pstats
+p = pstats.Stats(\"$OUTPUT\")
+p.sort_stats('time').print_stats(10)
+p.sort_stats('cumulative').print_stats(10)
+"
+
+rm -- "$OUTPUT"
