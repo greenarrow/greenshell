@@ -1,0 +1,45 @@
+#!/bin/bash
+
+set -e
+
+usage()
+{
+    echo "Usage: `basename $0` [COMMAND]"
+    echo "For each line read from standard input checks out commit specified"
+    echo "on line and runs COMMAND."
+    echo
+}
+
+restore()
+{
+    git checkout -q "$HEAD"
+}
+
+if [ $# -eq 0 ]
+then
+    usage
+    exit 1
+fi
+
+if [ "$1" == "-h" ]
+then
+    usage
+    exit 0
+fi
+
+HEAD=`git log -1 --format='%h'`
+trap restore EXIT
+
+while read line
+do
+    if [ -z "$line" ]
+    then
+        break;
+    fi
+
+    git checkout -q "$line"
+    echo
+    git log -1 --oneline
+    echo $@
+    eval "$@"
+done
