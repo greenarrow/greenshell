@@ -53,3 +53,21 @@ def dictdiff(a, b):
                     print "+ %s" % repr({key : b[key]})
 
 
+def printt(value):
+    value = str(value)
+    parts = []
+
+    for i in range(0, len(value), 3):
+            parts.append(value[-i - 3:-i or None])
+
+    return ",".join(reversed(parts))
+
+
+def divide(function, sequence):
+    top, bottom = [], []
+    for i in sequence:
+        if function(i):
+            top.append(i)
+        else:
+            bottom.append(i)
+    return top, bottom
