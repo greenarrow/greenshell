@@ -1,0 +1,59 @@
+#!/bin/bash
+
+set -eu
+set -o pipefail
+
+
+usage()
+{
+    echo "Usage: cleanpo [-s] [FILE..]"
+    echo
+    echo "Rule check status of git repositories."
+    echo
+    echo "Options:"
+    echo "  -s  whitespace is spaces rather than tabs"
+    echo "  -h  show this help and exit"
+}
+
+
+TAB=`echo -e '\t'`
+BADSTART="  "
+
+while getopts 'sh' OPT
+do
+    case $OPT in
+        s)
+            BADSTART="$TAB"
+            ;;
+        h)
+            usage
+            exit 0
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+declare -i RC=0
+
+if git ls-files ${1-} | xargs grep "^$BADSTART"
+then
+    echo "^ whitespace errors" >&2
+    echo >&2
+    RC+=1
+fi
+
+if git ls-files ${1-} | xargs grep -i -e 'todo' -e ' fix' -e 'hack'
+then
+    echo "^ bad words" >&2
+    echo >&2
+    RC+=1
+fi
+
+if git log --format='%s' | grep -e '^TMP' -e '^TODO' -e '^TEST'
+then
+    echo "^ bad patches" >&2
+    echo >&2
+    RC+=1
+fi
+
+exit $RC
