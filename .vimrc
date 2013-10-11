@@ -29,3 +29,12 @@ function TabToggle()
     endif
 endfunction
 nmap <F9> mz:execute TabToggle()<CR>'z
+
+function WrapToggle()
+    if &tw == 0
+        set tw=79
+    else
+        set tw=0
+    endif
+endfunction
+nmap <F8> mz:execute WrapToggle()<CR>'z
