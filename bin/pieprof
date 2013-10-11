@@ -5,35 +5,72 @@ set -e
 
 usage()
 {
-    echo "Usage: `basename $0` [arg] ..."
+    echo "Usage: `basename $0` [-k] [arg] ..."
+    echo "       `basename $0` [-f DATA]"
     echo "Profile Python code using cProfile."
-    echo
+    echo "   -h"
+    echo "   -k  Keep profile data"
+    echo "   -f  Display stats from profile data file"
 }
 
 
-if [ $# -eq 0 ]
+output_stats()
+{
+    python -c "import pstats, sys
+p = pstats.Stats(\"$1\", stream=sys.stderr)
+p.sort_stats('time').print_stats(10)
+p.sort_stats('cumulative').print_stats(10)"
+}
+
+
+PURGE=true
+RUN=true
+
+while getopts 'hkf:' OPT
+do
+    case $OPT in
+        h)
+            usage
+            exit 0
+            ;;
+        k)
+            PURGE=false
+            ;;
+        f)
+            RUN=false
+            PURGE=false
+            OUTPUT=$OPTARG
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if $RUN && [ $# -eq 0 ]
 then
     usage
     exit 1
 fi
 
-if [ "$1" == "-h" ]
+if $RUN
 then
-    usage
-    exit 0
+    OUTPUT=`mktemp`
+    python -m cProfile -o $OUTPUT -- $@
 fi
 
-OUTPUT=`mktemp`
+echo >&2
+output_stats "$OUTPUT"
 
-python -m cProfile -o $OUTPUT -- $@
-
-echo
-
-python -c "
-import pstats
-p = pstats.Stats(\"$OUTPUT\")
-p.sort_stats('time').print_stats(10)
-p.sort_stats('cumulative').print_stats(10)
-"
-
-rm -- "$OUTPUT"
+if $PURGE
+then
+    rm -- "$OUTPUT"
+else
+    if $RUN
+    then
+        echo "$OUTPUT" >&2
+    fi
+fi
