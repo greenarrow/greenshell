@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 echo "source $HOME/.greenshell/greenrc.sh" >> $HOME/.bashrc
 echo "source $HOME/.greenshell/aliases.sh" >> $HOME/.bashrc
 
