@@ -1,0 +1,102 @@
+#!/usr/bin/env python
+
+import pylab
+import sys
+import os
+import argparse
+
+
+COLOURS = 'rbcmykg'
+STYLES = ('-', '--', '-.')
+
+
+def get_colour(index):
+    while index >= len(COLOURS):
+        index -= len(COLOURS)
+    return COLOURS[index]
+
+
+def get_style(index):
+    index = int(index) / len(COLOURS)
+    while index >= len(STYLES):
+        index -= len(STYLES)
+    return STYLES[index]
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-F", "--field-separator", metavar = "STRING",
+                        nargs = 1, default = "\t")
+
+    parser.add_argument("-R", "--record-separator", metavar = "STRING",
+                        nargs = 1, default = "\n")
+
+    parser.add_argument("-o", "--origin", action = "store_true",
+                        default = False)
+
+    parser.add_argument("-l", "--label", metavar = ("AXIS", "LABEL"),
+                        type = str, nargs = 2, action = "append", default = [])
+
+    parser.add_argument("-g", "--log", metavar = "AXIS", type = str, nargs = 1,
+                        action = "append", default = [])
+
+    parser.add_argument("source", metavar = "FILE", nargs = "*",
+                        default = ["-"])
+
+    return parser.parse_args()
+
+
+def plot_file(args, filename):
+    if filename == "-":
+        stream = sys.stdin
+    else:
+        stream = open(filename)
+
+    # Load all the data
+    data = map(
+        lambda line: map(
+            float,
+            line.split(args.field_separator[0])
+        ),
+        filter(
+            lambda line: len(line) > 0 and not line.startswith("#"),
+            stream.read().split(args.record_separator[0])
+        )
+    )
+
+    # Munge data into form required by pylab
+    series = map(
+        lambda column: map(lambda line: line[column], data),
+        range(len(data[0]))
+    )
+
+    for i, y in enumerate(series[1:]):
+        pylab.plot(series[0], y, '-x', color=get_colour(i))
+
+    stream.close()
+
+
+if __name__ == "__main__":
+    args = parse_args()
+    print args
+
+    fig = pylab.figure()
+
+    for arg in args.source:
+        plot_file(args, arg)
+
+    # Apply formatting for whole graph
+    if args.origin:
+        pylab.xlim(xmin = 0)
+        pylab.ylim(ymin = 0)
+
+    for arg in args.label:
+        axis = arg[0].lower()
+        getattr(pylab, "%slabel" % axis)(arg[1])
+
+    for arg in args.log:
+        axis = arg[0].lower()
+        getattr(pylab, "%sscale" % axis)("log")
+
+    pylab.show()
