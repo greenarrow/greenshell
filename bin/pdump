@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -eu
+
+PID="$1"
+
+echo "exe:"
+ls -l "/proc/$PID/exe"
+echo
+
+echo "stack:"
+cat "/proc/$PID/stack"
+echo
+
+# TODO option
+#echo "pstack:"
+#pstack "$PID"
+#echo
+
+echo "fd:"
+ls -l "/proc/$PID/fd"
+echo
+
+echo "wchan:"
+cat "/proc/$PID/wchan"
+echo
+echo
+
+echo "status:"
+cat "/proc/$PID/status"
+echo
+
+# TODO option
+#echo "strace:"
+#strace -p "$PID" &
+#TP="$$"
+
+#sleep 5
+#kill "$TP"
+#echo
