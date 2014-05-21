@@ -1,0 +1,45 @@
+#!/bin/bash
+
+set -eu
+
+usage()
+{
+    echo "usage: git checkpoint save"
+    echo "       git checkpoint diff"
+    echo "       git checkpoint clear"
+}
+
+
+FILENAME=".gitcheckpoint"
+
+if [ $# -ne 1 ]
+then
+    usage
+    exit 1
+fi
+
+case "${1}" in
+    save)
+        CHECKPOINT=`git rev-list -1 HEAD`
+        echo "${CHECKPOINT}" > "${FILENAME}"
+        echo "set checkpoint to ${CHECKPOINT}"
+        ;;
+
+    diff)
+        CHECKPOINT=`cat ${FILENAME}`
+        git diff "${CHECKPOINT}..HEAD"
+        ;;
+
+    clear)
+        rm "${FILENAME}"
+        ;;
+
+    help)
+        usage
+        ;;
+
+    *)
+        usage
+        exit 1
+        ;;
+esac
