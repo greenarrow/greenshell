@@ -87,7 +87,6 @@ def plot_file(args, filename):
 
 if __name__ == "__main__":
     args = parse_args()
-    print args
 
     fig = pylab.figure()
 
