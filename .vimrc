@@ -4,7 +4,7 @@ set number
 set shiftwidth=4
 set softtabstop=4
 set expandtab
-set tw=79
+set textwidth=79
 
 colorscheme greencobalt
 :set guioptions-=T 
@@ -32,9 +32,9 @@ nmap <F9> mz:execute TabToggle()<CR>'z
 
 function WrapToggle()
     if &tw == 0
-        set tw=79
+        set textwidth=79
     else
-        set tw=0
+        set textwidth=0
     endif
 endfunction
 nmap <F8> mz:execute WrapToggle()<CR>'z
