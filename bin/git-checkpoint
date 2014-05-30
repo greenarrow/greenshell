@@ -10,7 +10,7 @@ usage()
 }
 
 
-FILENAME=".gitcheckpoint"
+FILENAME="`git rev-parse --show-toplevel`/.gitcheckpoint"
 
 if [ $# -ne 1 ]
 then
