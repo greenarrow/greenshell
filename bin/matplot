@@ -35,6 +35,9 @@ def parse_args():
     parser.add_argument("-o", "--origin", action = "store_true",
                         default = False)
 
+    parser.add_argument("-m", "--markers", action = "store_true",
+                        default = False)
+
     parser.add_argument("-l", "--label", metavar = ("AXIS", "LABEL"),
                         type = str, nargs = 2, action = "append", default = [])
 
@@ -71,8 +74,13 @@ def plot_file(args, filename):
         range(len(data[0]))
     )
 
+    if args.markers:
+        fmt = '-x'
+    else:
+        fmt = '-'
+
     for i, y in enumerate(series[1:]):
-        pylab.plot(series[0], y, '-x', color=get_colour(i))
+        pylab.plot(series[0], y, fmt, color=get_colour(i))
 
     stream.close()
 
