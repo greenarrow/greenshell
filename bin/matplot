@@ -4,6 +4,7 @@ import pylab
 import sys
 import os
 import argparse
+import datetime
 
 
 COLOURS = 'rbcmykg'
@@ -44,6 +45,9 @@ def parse_args():
     parser.add_argument("-g", "--log", metavar = "AXIS", type = str, nargs = 1,
                         action = "append", default = [])
 
+    parser.add_argument("-t", "--timestamp", action = "store_true",
+                        default = False)
+
     parser.add_argument("source", metavar = "FILE", nargs = "*",
                         default = ["-"])
 
@@ -73,6 +77,10 @@ def plot_file(args, filename):
         lambda column: map(lambda line: line[column], data),
         range(len(data[0]))
     )
+
+    if args.timestamp:
+        pylab.xticks(rotation=90)
+        series[0] = map(datetime.datetime.fromtimestamp, series[0])
 
     if args.markers:
         fmt = '-x'
