@@ -1,4 +1,4 @@
 --verbose
 --track-fds=yes
---log-file=/tmp/valgrind.log
+--log-file=valgrind.%p.log
 --memcheck:track-origins=yes
