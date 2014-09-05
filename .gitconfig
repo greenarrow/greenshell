@@ -17,6 +17,11 @@
 	dp=commit --amend
 	co=checkout
 	b=branch
+	ff=merge --ff-only
+	pf=pull --ff-only
+	update=!git remote update && git --no-pager log HEAD..FETCH_HEAD && git pull --ff-only
+	bling=log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	check=!git diff --check $(git hash-object -t tree /dev/null)
 
 [core]
 	excludesfile = ~/.gitignore-global
