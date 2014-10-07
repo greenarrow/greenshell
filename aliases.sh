@@ -32,7 +32,7 @@ alias vr='vim -R'
 alias ll='ls -l'
 alias deltemp='find . -iname "*~"|xargs rm'
 alias delpyc='find . -iname "*.pyc"|xargs rm'
-alias time='/usr/bin/time -v '
+alias time='/usr/bin/time -p'
 alias e='echo $?'
 
 alias xp='exaile --play-pause'
