@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 """
-Opens all changed files in the editor defined in GS_EDITOR or provided as an
-argument.
+Opens all changed files in the editor provided as an argument.
 """
 
 import sys
@@ -12,10 +11,7 @@ import subprocess
 
 
 if __name__ == "__main__":
-	if len(sys.argv) > 1:
-		editor = sys.argv[1]
-	else:
-		editor = os.environ["GS_EDITOR"]
+	editor = sys.argv[1]
 
 	success = all(map(
 		lambda i: subprocess.Popen(
