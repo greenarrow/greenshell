@@ -2,25 +2,42 @@
 
 set -eu
 
-echo "source $HOME/.greenshell/greenrc.sh" >> $HOME/.bashrc
-echo "source $HOME/.greenshell/aliases.sh" >> $HOME/.bashrc
+install()
+{
+	cd -- "${HOME}"
 
-mv $HOME/.gitconfig $HOME/.gitconfig.old
-ln -s $HOME/.greenshell/.gitconfig $HOME/.gitconfig
-ln -s $HOME/.greenshell/.gitignore-global $HOME/.gitignore-global
+	if [ -h "$1" ]
+	then
+		REF=$(readlink -- "$1")
 
-cd $HOME || exit 1
-mv .vim .vim.old
-mv .vimrc .vimrc.old
-mv .gdbinit .gdbinit.old
-ln -s $HOME/.greenshell/.vim $HOME/.vim
-ln -s $HOME/.greenshell/.vimrc $HOME/.vimrc
-ln -s $HOME/.greenshell/.gdbinit $HOME/.gdbinit
+		if [ "${REF}" == "$1" ]
+		then
+			return
+		fi
 
-mv $HOME/.config/Terminal/terminalrc $HOME/.config/Terminal/terminalrc.old
-ln -s $HOME/.greenshell/terminalrc $HOME/.config/Terminal/terminalrc
+	else
+		if [ -e "$1" ]
+		then
+			DIR=$(dirname -- "$1")
+			${PREFIX} mkdir -p -- "${BASE}/backup/${DIR}"
+			${PREFIX} mv -- "$1" "$BASE/backup/$1"
+		fi
+	fi
 
-mv $HOME/.valgrindrc $HOME/.valgrindrc.old
-ln -s $HOME/.greenshell/.valgrindrc $HOME/.valgrindrc
+	${PREFIX} ln -fs -- "${BASE}/$1" "$1"
+}
 
-echo "done"
+BASE=".greenshell"
+PREFIX=""
+
+install ".gitconfig"
+install ".gitignore-global"
+install ".vim"
+install ".vimrc"
+install ".gdbinit"
+install ".valgrindrc"
+install ".config/Terminal/terminalrc"
+
+echo "ensure this line is present at the end of a suitable rc script:"
+echo
+echo "source $HOME/.greenshell/greenrc.sh"
