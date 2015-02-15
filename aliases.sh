@@ -15,6 +15,8 @@ alias ge='gedit'
 alias gv='gvim'
 alias gvr='gvim --remote'
 
+alias os='openscad'
+
 alias pie='PYTHONSTARTUP=$HOME/.greenshell/pie.py python'
 
 alias ppwd='export PYTHONPATH=$PWD:$PYTHONPATH;echo $PYTHONPATH'
