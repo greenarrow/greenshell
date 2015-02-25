@@ -1,0 +1,10 @@
+[BASIC]
+module-rgx=(([a-z_\-][a-z0-9_\-]*)|([A-Z\-][a-zA-Z0-9\-]+))$
+const-rgx=(([A-Za-z_][A-Za-z0-9_]*)|(__.*__))$
+variable-rgx=[a-z_][a-z0-9_]{0,30}$
+argument-rgx=[a-z_][a-z0-9_]{0,30}$
+attr-rgx=[a-z_][a-z0-9_]{1,30}$
+no-docstring-rgx=
+
+[REPORTS]
+reports=no

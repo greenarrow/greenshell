@@ -37,6 +37,7 @@ install ".vimrc"
 install ".gdbinit"
 install ".valgrindrc"
 install ".config/Terminal/terminalrc"
+install ".pylintrc"
 
 echo "ensure this line is present at the end of a suitable rc script:"
 echo
