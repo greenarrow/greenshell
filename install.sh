@@ -2,6 +2,21 @@
 
 set -eu
 
+
+relative()
+{
+	PARENT=$(dirname "$1")
+
+	if [ "${PARENT}" == "." ]
+	then
+		return
+	fi
+
+	echo -n "../"
+	relative "${PARENT}"
+}
+
+
 install()
 {
 	cd -- "${HOME}"
@@ -24,7 +39,8 @@ install()
 		fi
 	fi
 
-	${PREFIX} ln -fs -- "${BASE}/$1" "$1"
+	REL=$(relative "$1")
+	${PREFIX} ln -fs -- "${REL}${BASE}/$1" "$1"
 }
 
 BASE=".greenshell"
