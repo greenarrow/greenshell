@@ -14,12 +14,24 @@ usage()
 }
 
 
-output_stats()
+after()
 {
+    echo >&2
+
     python -c "import pstats, sys
-p = pstats.Stats(\"$1\", stream=sys.stderr)
+p = pstats.Stats(\"${OUTPUT}\", stream=sys.stderr)
 p.sort_stats('time').print_stats(10)
 p.sort_stats('cumulative').print_stats(10)"
+
+    if $PURGE
+    then
+        rm -- "$OUTPUT"
+    else
+        if $RUN
+        then
+            echo "$OUTPUT" >&2
+        fi
+    fi
 }
 
 
@@ -56,21 +68,10 @@ then
     exit 1
 fi
 
+trap after EXIT
+
 if $RUN
 then
     OUTPUT=`mktemp`
     python -m cProfile -o $OUTPUT -- $@
-fi
-
-echo >&2
-output_stats "$OUTPUT"
-
-if $PURGE
-then
-    rm -- "$OUTPUT"
-else
-    if $RUN
-    then
-        echo "$OUTPUT" >&2
-    fi
 fi
