@@ -47,6 +47,9 @@ def parse_args():
     parser.add_argument("-t", "--timestamp", action = "store_true",
                         default = False)
 
+    parser.add_argument("-d", "--headers", action = "store_true",
+                        default = False)
+
     parser.add_argument("source", metavar = "FILE", nargs = "*",
                         default = ["-"])
 
@@ -58,6 +61,17 @@ def plot_file(args, filename):
         stream = sys.stdin
     else:
         stream = open(filename)
+
+    names = None
+
+    if args.headers:
+        while True:
+            line = stream.readline()
+
+            if not line.startswith("#"):
+                break
+
+        names = line.split(args.field_separator[0])[1:]
 
     # Load all the data
     data = map(
@@ -77,6 +91,9 @@ def plot_file(args, filename):
         range(len(data[0]))
     )
 
+    if names is None:
+        names = [None] * len(series)
+
     if args.timestamp:
         pylab.xticks(rotation=90)
         series[0] = map(datetime.datetime.fromtimestamp, series[0])
@@ -87,7 +104,7 @@ def plot_file(args, filename):
         fmt = ''
 
     for i, y in enumerate(series[1:]):
-        pylab.plot(series[0], y, fmt, color=get_colour(i),
+        pylab.plot(series[0], y, fmt, color=get_colour(i), label=names[i],
                    linestyle=get_style(i))
 
     stream.close()
@@ -113,5 +130,8 @@ if __name__ == "__main__":
     for arg in args.log:
         axis = arg[0].lower()
         getattr(pylab, "%sscale" % axis)("log")
+
+    if args.headers:
+        pylab.legend()
 
     pylab.show()
