@@ -18,7 +18,6 @@ def get_colour(index):
 
 
 def get_style(index):
-    index = int(index) / len(COLOURS)
     while index >= len(STYLES):
         index -= len(STYLES)
     return STYLES[index]
@@ -83,12 +82,13 @@ def plot_file(args, filename):
         series[0] = map(datetime.datetime.fromtimestamp, series[0])
 
     if args.markers:
-        fmt = '-x'
+        fmt = 'x'
     else:
-        fmt = '-'
+        fmt = ''
 
     for i, y in enumerate(series[1:]):
-        pylab.plot(series[0], y, fmt, color=get_colour(i))
+        pylab.plot(series[0], y, fmt, color=get_colour(i),
+                   linestyle=get_style(i))
 
     stream.close()
 
