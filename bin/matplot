@@ -109,7 +109,7 @@ def plot_file(args, filename):
     stream.close()
 
 
-if __name__ == "__main__":
+def main():
     args = parse_args()
 
     fig = pylab.figure()
@@ -134,3 +134,7 @@ if __name__ == "__main__":
         pylab.legend()
 
     pylab.show()
+
+
+if __name__ == "__main__":
+    main()
