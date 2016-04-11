@@ -52,6 +52,9 @@ def parse_args():
     parser.add_argument("-a", "--tag-format", action = "store_true",
                         default = False)
 
+    parser.add_argument("-s", "--scatter", action = "store_true",
+                        default = False)
+
     parser.add_argument("source", metavar = "FILE", nargs = "*",
                         default = ["-"])
 
@@ -139,8 +142,14 @@ def plot_file(args, filename):
 
         y = [v[1] for v in item[1]]
 
+        if args.scatter:
+            style = ''
+
+        else:
+            style = get_style(i)
+
         pylab.plot(x, y, fmt, color=get_colour(i), label=item[0],
-                   linestyle=get_style(i))
+                   linestyle=style)
 
     stream.close()
 
